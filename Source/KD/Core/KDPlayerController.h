@@ -34,6 +34,12 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly , Category="KD|Input|Abilities")
 	TObjectPtr<UInputAction> PrimaryAction;
+	
+	UPROPERTY(EditDefaultsOnly , Category="KD|Input|Abilities")
+	TObjectPtr<UInputAction> SecondaryAction;
+	
+	UPROPERTY(EditDefaultsOnly , Category="KD|Input|Abilities")
+	TObjectPtr<UInputAction> TertiaryAction;
 
 	//回调函数
 	void Move(const FInputActionValue& Value);
@@ -41,4 +47,7 @@ private:
 	void Jump();
 	void StopJumping();
 	void Primary();
+	void Secondary();
+	void Tertiary();
+	void ActivateAbility(const FGameplayTag& AbilityTag);
 };

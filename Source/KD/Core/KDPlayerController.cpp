@@ -2,9 +2,12 @@
 
 
 #include "KDPlayerController.h"
+
+#include "AbilitySystemComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/Character.h"
+#include "KD/GameplayTags/KDTags.h"
 
 
 void AKDPlayerController::SetupInputComponent()
@@ -35,7 +38,14 @@ void AKDPlayerController::SetupInputComponent()
 		if (PrimaryAction) {
 			EnhancedInputComponent->BindAction(PrimaryAction, ETriggerEvent::Triggered, this, &AKDPlayerController::Primary);
 		}
-		
+		if (SecondaryAction)
+		{
+			EnhancedInputComponent->BindAction(SecondaryAction, ETriggerEvent::Triggered, this, &AKDPlayerController::Secondary);
+		}
+		if (TertiaryAction)
+		{
+			EnhancedInputComponent->BindAction(TertiaryAction, ETriggerEvent::Triggered, this, &AKDPlayerController::Tertiary);
+		}
 	}	
 }
 
@@ -82,5 +92,26 @@ void AKDPlayerController::StopJumping()
 
 void AKDPlayerController::Primary()
 {
-	UE_LOG(LogTemp, Warning,TEXT("Primary Action"));
+	ActivateAbility(KDTags::KDAbilities::Primary);
 }
+
+void AKDPlayerController::Secondary()
+{
+	ActivateAbility(KDTags::KDAbilities::Secondary);
+}
+
+void AKDPlayerController::Tertiary()
+{
+	ActivateAbility(KDTags::KDAbilities::Tertiary);
+}
+
+void AKDPlayerController::ActivateAbility(const FGameplayTag& AbilityTag)
+{
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+	
+	if (!IsValid(ASC)) return;
+	
+	ASC->TryActivateAbilitiesByTag(AbilityTag.GetSingleTagContainer());
+}
+
+

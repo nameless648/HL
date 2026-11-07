@@ -41,12 +41,17 @@ UAbilitySystemComponent* AKDPlayerCharacter::GetAbilitySystemComponent() const
 	return KDPlayerState->GetAbilitySystemComponent();
 }
 
+//服务器
 void AKDPlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+	
+	if (!IsValid(GetAbilitySystemComponent())||!HasAuthority()) return;
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
+	GiveStartAbilities();
 }
 
+//客户端
 void AKDPlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();

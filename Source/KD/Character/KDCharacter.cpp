@@ -4,6 +4,7 @@
 #include "KDCharacter.h"
 #include "AbilitySystemComponent.h"
 
+
 // Sets default values
 AKDCharacter::AKDCharacter()
 {
@@ -15,6 +16,17 @@ AKDCharacter::AKDCharacter()
 UAbilitySystemComponent* AKDCharacter::GetAbilitySystemComponent() const
 {
 	return nullptr;
+}
+
+//GA激活函数
+void AKDCharacter::GiveStartAbilities()
+{
+	if (!IsValid(GetAbilitySystemComponent())) return;
+	for (const auto & Ability : StartAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability);
+		GetAbilitySystemComponent()->GiveAbility(AbilitySpec);
+	}
 }
 
 
