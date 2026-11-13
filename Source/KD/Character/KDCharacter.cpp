@@ -29,5 +29,15 @@ void AKDCharacter::GiveStartAbilities()
 	}
 }
 
+void AKDCharacter::InitializeAttributes()const
+{
+	checkf (IsValid(InitializeAttributeEffect),TEXT("Initialize Attribute Effect Failed"));
+	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(InitializeAttributeEffect, 1,ContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+	
+		
+}
+
 
 

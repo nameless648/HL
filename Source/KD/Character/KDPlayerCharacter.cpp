@@ -49,6 +49,7 @@ void AKDPlayerCharacter::PossessedBy(AController* NewController)
 	if (!IsValid(GetAbilitySystemComponent())||!HasAuthority()) return;
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
 	GiveStartAbilities();
+	InitializeAttributes();
 }
 
 //客户端

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "AttributeSet.h"
+#include "GameplayEffect.h"
 #include "GameFramework/Character.h"
 #include "KDCharacter.generated.h"
 
@@ -22,16 +22,14 @@ public:
 protected:
 	
 	void GiveStartAbilities();
+	void InitializeAttributes()const;
 	
 private:
-	//ASC
-	UPROPERTY(VisibleAnywhere,Category="KD|Abilities")
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-	
-	UPROPERTY(VisibleAnywhere,Category="KD|Abilities")
-	TObjectPtr<UAttributeSet> AttributeSet ;
-	
+
 	//GA
 	UPROPERTY(EditDefaultsOnly,Category="KD|Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartAbilities;
+	
+	UPROPERTY(EditDefaultsOnly,Category="KD|Abilities")
+	TSubclassOf<UGameplayEffect> InitializeAttributeEffect;
 };

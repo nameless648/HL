@@ -7,8 +7,8 @@
 #include "GameFramework/PlayerState.h"
 #include "KDPlayerState.generated.h"
 
-class UAbilitySystemComponent;
 class UAttributeSet;
+class UAbilitySystemComponent;
 /**
  * 
  */

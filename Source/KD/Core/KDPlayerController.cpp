@@ -25,7 +25,7 @@ void AKDPlayerController::SetupInputComponent()
 		//在这里绑定输入操作和回调函数
 		if (MoveAction) {
 			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AKDPlayerController::Move);
-		}
+		} 
 		if (LookAction) {
 			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AKDPlayerController::Look);
 		}

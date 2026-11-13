@@ -22,3 +22,9 @@ Thumbs.db
 
 # Content assets are not tracked in this code repository
 Content/
+
+# 虚幻盒子自动安装的 UnrealAgentLink 插件，不需要进版本库
+Plugins/UnrealAgentLink/
+
+# 编辑器/临时备份文件
+*~
