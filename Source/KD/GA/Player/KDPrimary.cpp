@@ -4,8 +4,10 @@
 #include "KDPrimary.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/OverlapResult.h"
+#include "GameplayEffect.h"
 #include "KD/GameplayTags/KDTags.h"
 
 void UKDPrimary::HitBoxOverLapText()
@@ -32,6 +34,25 @@ void UKDPrimary::HitBoxOverLapText()
 	for (const FOverlapResult& Result : OverlapResults)
 	{
 		if (!Result.GetActor()) continue;
+
+		// 先造成伤害：用自身 ASC 创建伤害 GE 的 Spec，应用到目标 ASC。
+		if (DamageGameplayEffect)
+		{
+			UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
+			UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Result.GetActor());
+			if (SourceASC && TargetASC)
+			{
+				FGameplayEffectContextHandle ContextHandle = SourceASC->MakeEffectContext();
+				ContextHandle.AddSourceObject(this);
+
+				FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageGameplayEffect, GetAbilityLevel(), ContextHandle);
+				if (SpecHandle.IsValid())
+				{
+					SourceASC->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetASC);
+				}
+			}
+		}
+
 		FGameplayEventData PayLoad;
 		PayLoad.Instigator = GetAvatarActorFromActorInfo();
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Result.GetActor() , KDTags::Event::Enemy::HitReact ,PayLoad );

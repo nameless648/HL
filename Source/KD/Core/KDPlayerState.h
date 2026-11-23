@@ -20,6 +20,9 @@ class KD_API AKDPlayerState : public APlayerState , public IAbilitySystemInterfa
 public:
 	AKDPlayerState();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	/** UI 层需要 AttributeSet 来广播初始值。 */
+	UAttributeSet* GetAttributeSet() const;
 	
 private:
 	UPROPERTY(VisibleAnywhere,Category="KD|Abilities")

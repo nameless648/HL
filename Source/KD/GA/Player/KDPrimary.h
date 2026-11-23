@@ -1,10 +1,12 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "KD/GA/KDGameplayAbility.h"
 #include "KDPrimary.generated.h"
+
+class UGameplayEffect;
 
 /**
  * 
@@ -17,6 +19,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable , Category = "KD|Ability")
 	void HitBoxOverLapText();
+
+	/** 命中时应用到目标的伤害效果（GE_PlayerDamage），在 GA_Primary 的 Class Defaults 里指定。 */
+	UPROPERTY(EditDefaultsOnly , Category = "KD|Ability")
+	TSubclassOf<UGameplayEffect> DamageGameplayEffect;
 	
 private:
 	void DrawHitBoxOverLapDebugs(const TArray<FOverlapResult> &OverlapResults,const FVector& HitBoxLocation) const;

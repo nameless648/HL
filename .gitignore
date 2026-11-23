@@ -28,3 +28,6 @@ Plugins/UnrealAgentLink/
 
 # 编辑器/临时备份文件
 *~
+
+# Rider 个人设置文件
+*.DotSettings.user

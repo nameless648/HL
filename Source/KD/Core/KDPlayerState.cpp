@@ -18,3 +18,8 @@ UAbilitySystemComponent* AKDPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
+
+UAttributeSet* AKDPlayerState::GetAttributeSet() const
+{
+	return AttributeSet;
+}

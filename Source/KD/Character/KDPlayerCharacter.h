@@ -20,7 +20,8 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 private:
-	
+	void InitOverlay();
+
 	UPROPERTY(VisibleAnywhere ,Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	

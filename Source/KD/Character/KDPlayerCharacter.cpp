@@ -7,6 +7,8 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "KD/Core/KDPlayerState.h"
+#include "KD/Core/KDPlayerController.h"
+#include "KD/UI/KDHUD.h"
 
 
 // Sets default values
@@ -50,14 +52,31 @@ void AKDPlayerCharacter::PossessedBy(AController* NewController)
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
 	GiveStartAbilities();
 	InitializeAttributes();
+	InitOverlay();
 }
 
 //客户端
 void AKDPlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+
+	if (!IsValid(GetAbilitySystemComponent())) return;
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
-	
+
+	InitOverlay();
+}
+
+// 把 HUD 和 GAS 的上下文接起来。UI 层自己不负责查找 PC / PS / ASC。
+void AKDPlayerCharacter::InitOverlay()
+{
+	AKDPlayerState* KDPlayerState = GetPlayerState<AKDPlayerState>();
+	AKDPlayerController* KDPlayerController = Cast<AKDPlayerController>(GetController());
+	if (!KDPlayerState || !KDPlayerController) return;
+
+	if (AKDHUD* HUD = Cast<AKDHUD>(KDPlayerController->GetHUD()))
+	{
+		HUD->InitOverlay(KDPlayerController, KDPlayerState, GetAbilitySystemComponent(), KDPlayerState->GetAttributeSet());
+	}
 }
 
 
