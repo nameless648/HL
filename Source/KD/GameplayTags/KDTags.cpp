@@ -16,4 +16,14 @@ namespace KDTags
 			UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact , "KDTags.Event.Enemy.HitReact" , "Tag for the Enemy HitReact Event");
 		}
 	}
+
+	namespace UI
+	{
+		namespace Layer
+		{
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(Game , "KDTags.UI.Layer.Game" , "常驻 HUD 层（血条、准星）");
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(Menu , "KDTags.UI.Layer.Menu" , "菜单层（暂停、背包）");
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(Modal , "KDTags.UI.Layer.Modal" , "模态层（确认框），优先于菜单层");
+		}
+	}
 }

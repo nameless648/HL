@@ -8,7 +8,7 @@ public class KD : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","GameplayAbilities" ,"GameplayTags" , "GameplayTasks", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","GameplayAbilities" ,"GameplayTags" , "GameplayTasks", "UMG", "CommonUI", "CommonInput" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {});
 

@@ -21,4 +21,14 @@ namespace KDTags
 			UE_DECLARE_GAMEPLAY_TAG_EXTERN(HitReact);
 		}
 	}
+
+	namespace UI
+	{
+		namespace Layer
+		{
+			UE_DECLARE_GAMEPLAY_TAG_EXTERN(Game);
+			UE_DECLARE_GAMEPLAY_TAG_EXTERN(Menu);
+			UE_DECLARE_GAMEPLAY_TAG_EXTERN(Modal);
+		}
+	}
 }

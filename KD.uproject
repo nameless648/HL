@@ -28,6 +28,10 @@
 		{
 			"Name": "UnrealAgentLink",
 			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
+			"Enabled": true
 		}
 	]
 }

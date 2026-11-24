@@ -1,14 +1,33 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "KDPlayerController.h"
 
 #include "AbilitySystemComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/Character.h"
 #include "KD/GameplayTags/KDTags.h"
+#include "KD/UI/KDHUDLayout.h"
+#include "KD/UI/KDMenuWidget.h"
+#include "KD/UI/KDUIManagerSubsystem.h"
 
+
+void AKDPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 菜单的根布局：整局只创建一次，菜单由它内部的 Stack 管理。
+	if (HUDLayoutClass)
+	{
+		HUDLayout = CreateWidget<UKDHUDLayout>(this, HUDLayoutClass);
+		if (HUDLayout)
+		{
+			HUDLayout->AddToViewport();
+		}
+	}
+}
 
 void AKDPlayerController::SetupInputComponent()
 {
@@ -46,11 +65,55 @@ void AKDPlayerController::SetupInputComponent()
 		{
 			EnhancedInputComponent->BindAction(TertiaryAction, ETriggerEvent::Triggered, this, &AKDPlayerController::Tertiary);
 		}
+		if (PauseAction)
+		{
+			EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AKDPlayerController::TogglePauseMenu);
+		}
+		if (InventoryAction)
+		{
+			EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AKDPlayerController::ToggleInventoryMenu);
+		}
 	}	
+}
+
+bool AKDPlayerController::IsMenuOpen() const
+{
+	const UKDUIManagerSubsystem* UIManager = UKDUIManagerSubsystem::Get(this);
+	if (!UIManager)
+	{
+		return false;
+	}
+
+	APlayerController* Self = const_cast<AKDPlayerController*>(this);
+	return UIManager->HasMenu(Self, KDTags::UI::Layer::Menu)
+		|| UIManager->HasMenu(Self, KDTags::UI::Layer::Modal);
+}
+
+void AKDPlayerController::ToggleMenu(TSubclassOf<UKDMenuWidget> MenuClass, FGameplayTag Layer)
+{
+	if (UKDUIManagerSubsystem* UIManager = UKDUIManagerSubsystem::Get(this))
+	{
+		UIManager->ToggleMenu(this, MenuClass, Layer);
+	}
+}
+
+void AKDPlayerController::TogglePauseMenu()
+{
+	ToggleMenu(PauseMenuClass, KDTags::UI::Layer::Menu);
+}
+
+void AKDPlayerController::ToggleInventoryMenu()
+{
+	ToggleMenu(InventoryMenuClass, KDTags::UI::Layer::Menu);
 }
 
 void AKDPlayerController::Move(const FInputActionValue& Value)
 {
+	if (IsMenuOpen())
+	{
+		return;
+	}
+
 	//从输入操作值中获取移动向量
 	FVector2D MoveVector = Value.Get<FVector2D>();
 
@@ -69,6 +132,11 @@ void AKDPlayerController::Move(const FInputActionValue& Value)
 
 void AKDPlayerController::Look(const FInputActionValue& Value)
 {
+	if (IsMenuOpen())
+	{
+		return;
+	}
+
 	// 输入为 Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -82,26 +150,49 @@ void AKDPlayerController::Look(const FInputActionValue& Value)
 
 void AKDPlayerController::Jump()
 {
+	if (IsMenuOpen() || !GetCharacter())
+	{
+		return;
+	}
+
 	GetCharacter()->Jump();
 }
 
 void AKDPlayerController::StopJumping()
 {
-	GetCharacter()->StopJumping();
+	if (GetCharacter())
+	{
+		GetCharacter()->StopJumping();
+	}
 }
 
 void AKDPlayerController::Primary()
 {
+	if (IsMenuOpen())
+	{
+		return;
+	}
+
 	ActivateAbility(KDTags::KDAbilities::Primary);
 }
 
 void AKDPlayerController::Secondary()
 {
+	if (IsMenuOpen())
+	{
+		return;
+	}
+
 	ActivateAbility(KDTags::KDAbilities::Secondary);
 }
 
 void AKDPlayerController::Tertiary()
 {
+	if (IsMenuOpen())
+	{
+		return;
+	}
+
 	ActivateAbility(KDTags::KDAbilities::Tertiary);
 }
 
@@ -113,5 +204,3 @@ void AKDPlayerController::ActivateAbility(const FGameplayTag& AbilityTag)
 	
 	ASC->TryActivateAbilitiesByTag(AbilityTag.GetSingleTagContainer());
 }
-
-
